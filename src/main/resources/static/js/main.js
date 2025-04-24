@@ -28,5 +28,18 @@ function connect(event){
     }
     event.preventDefault();
 }
+
+function onError(){
+    connectingElement.textContent = 'Could not connect to server! Please, refresh this page and try again...'
+    connectingElement.style.color = 'red';
+
+}
+
+function onConnected() {
+    stompClient.subscribe('/topic/public', onMessageReceived);
+
+    stompClient.send('/app/chat.addUser',{}, JSON.stringify({sender: username, type: 'JOIN'}));
+    connectingElement.classList.add('hidden');
+}
 usernameForm.addEventListener('submit', connect, true);
 messageForm.addEventListener('submit', sendMessage, true);
