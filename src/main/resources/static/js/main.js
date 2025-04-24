@@ -41,5 +41,20 @@ function onConnected() {
     stompClient.send('/app/chat.addUser',{}, JSON.stringify({sender: username, type: 'JOIN'}));
     connectingElement.classList.add('hidden');
 }
+
+function sendMessage(event) {
+
+    var messageContent = messageInput.value.trim();
+    if (messageContent && stompClient){
+        var chatMessage = {
+            sender: username, content: messageContent, type: 'CHAT'
+        };
+        stompClient.send('/app/chat.sendMessage',{}, JSON.stringify(chatMessage));
+        messageInput.value = '';
+    }
+
+    event.preventDefault()
+}
+
 usernameForm.addEventListener('submit', connect, true);
 messageForm.addEventListener('submit', sendMessage, true);
